@@ -3,7 +3,7 @@ import Navbar from '../Pages/Navbar'
 
 const MyLists = () => {
   return (
-    <div>
+    <div className='mt-20'>
         <Navbar />
         MyLists
         </div>
