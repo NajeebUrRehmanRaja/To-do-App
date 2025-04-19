@@ -9,7 +9,7 @@ const App = () => {
 
   return (
     <div>
-      <NavbarComponent title="My To-Do App" links={links} />
+      <NavbarComponent title="NoteAble" links={links} />
       {/* Other components go here */}
     </div>
   );

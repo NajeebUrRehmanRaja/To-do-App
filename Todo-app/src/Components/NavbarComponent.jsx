@@ -2,8 +2,8 @@ import React from "react";
 
 const NavbarComponent = ({ title, links = [] }) => {
   return (
-    <nav style={styles.navbar} aria-label="Main Navigation">
-      <h1 style={styles.title} className="cursor-pointer">
+    <nav style={styles.navbar} aria-label="Main Navigation" className="fixed top-0 w-full z-10">
+      <h1 style={styles.title} className="cursor-pointer text-2xl" onClick={() => window.location.href = '/' }>
         {title}
       </h1>
       <ul style={styles.navList}>
