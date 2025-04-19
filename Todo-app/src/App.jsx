@@ -3,7 +3,7 @@ import AppRouting from './Routes/AppRouting.jsx'
 
 const App = () => {
   return (
-    <div className="bg-gray-200">
+    <div>
       <AppRouting />
     </div>
   );
