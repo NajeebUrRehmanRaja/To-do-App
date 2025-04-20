@@ -1,11 +1,29 @@
-import { app } from "./App.js";
-import { connectDB } from "./src/config/db.config.js";
-import { env } from "./src/config/env.config.js";
+import express from 'express';
+import cors from 'cors';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import myListsRoute from './src/routes/myLists-Route.js';
 
-const port = env.PORT || 3000;
+dotenv.config();
 
-connectDB().then(() => {
-  app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
+const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use('/api/v1/listsnotes', myListsRoute);
+
+mongoose
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("Connected to MongoDB");
+  })
+  .catch((err) => console.error("MongoDB connection error:", err));
+
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
   });
-});
