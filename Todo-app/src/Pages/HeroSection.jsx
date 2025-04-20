@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router"; // Correct import
+import { Link } from "react-router";
 import { toast } from "react-toastify";
 
 const HeroSection = () => {
@@ -12,13 +12,6 @@ const HeroSection = () => {
     // Add task to local state
     const updatedTasks = [...taskList, inputValue.trim()];
     setTaskList(updatedTasks);
-
-    // Optional: Save globally if needed
-    const prevTasks = JSON.parse(localStorage.getItem("tasks")) || [];
-    localStorage.setItem(
-      "tasks",
-      JSON.stringify([...prevTasks, inputValue.trim()])
-    );
 
     // Show toast
     toast.success("New Task Added!", {
@@ -50,7 +43,7 @@ const HeroSection = () => {
           className="border border-gray-300 rounded w-full p-20"
           placeholder="Write Here..."
           value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
+          // onChange={(e) => setInputValue(e.target.value)}
         />
         <button
           className={`mt-4 sm:ml-2 bg-blue-500 text-white px-6 py-3 rounded cursor-pointer hover:bg-blue-600 transition duration-300 ${
@@ -67,7 +60,7 @@ const HeroSection = () => {
       {taskList.length > 0 && (
         <div className="mt-6 text-left">
           <h2 className="text-lg font-semibold mb-2">New Tasks:</h2>
-          <ul className="list-disc ml-6">
+          <ul className=" ml-6">
             {taskList.map((task, idx) => (
               <li key={idx}>{task}</li>
             ))}
