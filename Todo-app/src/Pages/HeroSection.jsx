@@ -78,7 +78,7 @@ const HeroSection = () => {
         />
         <textarea
           name=""
-          id=""
+          id="textarea"
           className="border border-gray-300 rounded w-full h-[200px] px-2 pt-3 pb-10"
           placeholder="Write Here..."
           value={description}
