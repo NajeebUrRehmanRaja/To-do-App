@@ -1,5 +1,4 @@
 import express from 'express';
-import cors from 'cors';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import myListsRoute from './src/routes/myLists-Route.js';
