@@ -3,9 +3,9 @@ import taskModel from "../models/task.model.js";
 const createTasks = async (req, res) => {
   try {
     const { title, content } = req.body;
-    if (!(title && content)){
-        return res.status(400).json({ message: "All Fields are required!" });
-  }
+    if (!(title && content)) {
+      return res.status(400).json({ message: "All Fields are required!" });
+    }
     const task = await taskModel.create({ title, content });
     if (!task) {
       return res
@@ -33,8 +33,8 @@ const updateTask = async (req, res) => {
       return res.status(404).json({ message: "Task Not Found!" });
     }
 
-    task.title = value.title || task.title;
-    task.content = value.content || task.content;
+    task.title = title || task.title;
+    task.content = content || task.content;
 
     await task.save();
 
@@ -45,7 +45,10 @@ const updateTask = async (req, res) => {
 };
 const latestTask = async (req, res) => {
   try {
-    const latestTask = await taskModel.findOne().sort({ createdAt: -1 }).limit(4);
+    const latestTask = await taskModel
+      .findOne()
+      .sort({ createdAt: -1 })
+      .limit(4);
     res.status(200).json(latestTask);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -54,8 +57,23 @@ const latestTask = async (req, res) => {
 
 const getAllTasks = async (req, res) => {
   try {
-    const allTasks = await taskModel.find().sort({ createdAt: -1 }).skip(0);
-    res.json(allTasks);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const sortBy = req.query.sortBy || "createdAt";
+    const sortOrder = req.query.sortOrder || "desc";
+    const skip = (page - 1) * limit;
+    const search = req.query.search || "";
+    const completed = req.query.completed || false;
+
+    const query = { title: { $regex: search, $options: "i" }, completed };
+
+    const allTasks = await taskModel
+      .find(query)
+      .sort({ [sortBy]: sortOrder })
+      .skip(skip)
+      .limit(limit);
+
+    res.status(200).json({ message: "tasks fetched", tasks: allTasks });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -63,7 +81,7 @@ const getAllTasks = async (req, res) => {
 const deleteTask = async (req, res) => {
   try {
     const { taskId } = req.params;
-    const task = await taskModel.findByIdAndDelete(taskId)
+    const task = await taskModel.findByIdAndDelete(taskId);
     if (!task) {
       return res.status(404).json({ message: "Task Not Found!" });
     }
@@ -73,4 +91,26 @@ const deleteTask = async (req, res) => {
   }
 };
 
-export { createTasks, updateTask , latestTask, getAllTasks };
+const completeTask = async (req, res) => {
+  try {
+    const { taskId } = req.params;
+    const task = await taskModel.findById(taskId);
+    if (!task) {
+      return res.status(404).json({ message: "Task Not Found!" });
+    }
+    task.completed = !task.completed;
+    await task.save();
+    return res.status(200).json({ message: "Task completed Successfully!" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export {
+  createTasks,
+  updateTask,
+  latestTask,
+  getAllTasks,
+  deleteTask,
+  completeTask,
+};

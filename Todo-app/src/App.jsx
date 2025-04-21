@@ -1,5 +1,5 @@
-import React from 'react'
-import AppRouting from './Routes/AppRouting.jsx'
+import React from "react";
+import AppRouting from "./Routes/AppRouting.jsx";
 
 const App = () => {
   return (
@@ -7,6 +7,6 @@ const App = () => {
       <AppRouting />
     </div>
   );
-}
+};
 
-export default App
+export default App;

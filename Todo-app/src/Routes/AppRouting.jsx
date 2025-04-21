@@ -1,7 +1,7 @@
-import React from 'react'
-import {Routes, Route, BrowserRouter} from 'react-router'
-import Home from '../Pages/Home.jsx'
-import MyLists from '../Pages/MyLists.jsx'
+import React from "react";
+import { Routes, Route, BrowserRouter } from "react-router";
+import Home from "../Pages/Home.jsx";
+import MyLists from "../Pages/MyLists.jsx";
 
 const AppRouting = () => {
   return (
@@ -12,6 +12,6 @@ const AppRouting = () => {
       </Routes>
     </BrowserRouter>
   );
-}
+};
 
-export default AppRouting
+export default AppRouting;
