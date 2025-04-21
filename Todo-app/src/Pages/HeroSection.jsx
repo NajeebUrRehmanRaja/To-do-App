@@ -1,35 +1,57 @@
 import React, { useState } from "react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import axiosInstance from "../lib/axios";
+import { useEffect } from "react";
 
 const HeroSection = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [taskList, setTaskList] = useState([]);
-
-  const handleAddTask = () => {
+  useEffect(() => {
+    const fetchTasks = async()=>{
+      try {
+        const res = await axiosInstance.get("/latest");
+        
+      } catch (error) {
+        
+      }
+    }
+  }, [ ]);
+  const handleAddTask = async () => {
     if (!title.trim()) return;
 
     const newTask = {
       title: title.trim(),
-      description: description.trim(),
+      content: description.trim(),
     };
+    try {
+      const res = await axiosInstance.post("/tasks", newTask);
+      if (res.status === 201) {
+        console.log(res.data)
+        setTaskList([...taskList, res.data.task]);
 
-    setTaskList([...taskList, newTask]);
+        toast.success("New Task Added!", {
+          hideProgressBar: true,
+          autoClose: 2000,
+          position: "bottom-right",
+          theme: "colored",
+        });
 
-    toast.success("New Task Added!", {
-      hideProgressBar: true,
-      autoClose: 2000,
-      position: "bottom-right",
-      theme: "colored",
-    });
-
-    // Clear inputs
-    setTitle("");
-    setDescription("");
+        // Clear inputs
+        setTitle("");
+        setDescription("");
+      }
+    } catch (error) {
+      toast.error("Error Found", {
+        hideProgressBar: true,
+        autoClose: 2000,
+        position: "bottom-right",
+        theme: "colored",
+      });
+    }
   };
 
- 
   const handleDeleteTask = (index) => {
     const updatedTasks = taskList.filter((_, idx) => idx !== index);
     setTaskList(updatedTasks);
@@ -40,7 +62,7 @@ const HeroSection = () => {
       position: "bottom-right",
       theme: "colored",
     });
-  }
+  };
   const handleEditTask = (index) => {
     const updatedTasks = [...taskList];
     const taskToEdit = updatedTasks[index];
@@ -48,13 +70,13 @@ const HeroSection = () => {
     setDescription(taskToEdit.description);
     updatedTasks.splice(index, 1);
     setTaskList(updatedTasks);
-  }
+  };
 
   const handleCompleteTask = (index) => {
     const updatedTasks = [...taskList];
     const taskToComplete = updatedTasks[index];
     taskToComplete.completed = !taskToComplete.completed;
-    setTaskList (updatedTasks); 
+    setTaskList(updatedTasks);
     updatedTasks.splice(index, 1);
     setTaskList(updatedTasks);
     toast.info("Task Completed!", {
@@ -63,7 +85,7 @@ const HeroSection = () => {
       position: "bottom-right",
       theme: "colored",
     });
-  }
+  };
   return (
     <div className="mx-auto mt-30 border text-center w-[90%] max-w-xl p-10 rounded-lg shadow-lg bg-white">
       <h1 className="text-4xl font-bold mb-4">Create your Daily Tasks!</h1>
@@ -92,7 +114,7 @@ const HeroSection = () => {
           className={`mt-4 sm:ml-2 bg-blue-500 text-white px-6 py-3 rounded cursor-pointer hover:bg-blue-600 transition duration-300 ${
             !title.trim() ? "opacity-50 cursor-not-allowed" : ""
           }`}
-          onClick={handleAddTask} 
+          onClick={handleAddTask}
           disabled={!title.trim()}
         >
           Add Task
